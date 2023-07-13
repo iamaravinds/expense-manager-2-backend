@@ -1,0 +1,18 @@
+{
+  "name": "expense-manager-2-backend",
+  "version": "1.0.0",
+  "description": "Backend for Expense Manager 2",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "iamaravinds <aravindsankararaman@outlook.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/autoload": "4.0.0",
+    "@fastify/mongodb": "^7.0.0",
+    "fastify": "^4.19.2",
+    "fastify-plugin": "^4.5.0"
+  }
+}
