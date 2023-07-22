@@ -1,3 +1,4 @@
+const TransactionHelper = require('../helper/transaction-helper');
 class TransactionController {
   constructor(fastify) {
     this.mongo = fastify.mongo;
@@ -26,12 +27,15 @@ class TransactionController {
   }
   async createTransaction(request, reply) {
     try {
-      const { statement } = request.body;
+      const { data } = request.body;
       const dbClientData = await this.Client.findOne({
-        _id: new this.mongo.ObjectId(statement.clientId),
+        _id: new this.mongo.ObjectId(data.clientId),
       });
       if (dbClientData) {
-        const result = await this.Transaction.insertOne(statement);
+        const statementArray = TransactionHelper.constructHDFCStatement(
+          data.transactions
+        );
+        const result = await this.Transaction.insertMany(statementArray);
         reply.code(200).send(result);
       }
       reply.code(400).send({ message: 'Invalid client!!' });

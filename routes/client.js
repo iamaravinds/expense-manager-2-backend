@@ -24,7 +24,6 @@ async function routes(fastify, options) {
   });
 
   fastify.post('/client', async (request, reply) => {
-    // we can use the `request.body` object to get the data sent by the client
     const result = await collection.insertOne(request.body.client);
     return result;
   });
