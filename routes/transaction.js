@@ -6,18 +6,16 @@ async function routes(fastify, options) {
     return transactionController.getAllTransaction(request, reply);
   });
 
-  fastify.get('/transaction/:transactionId', async (request, reply) => {
-    const result = await collection.findOne({
-      animal: request.params.transactionId,
-    });
-    if (!result) {
-      reply.code(404).send({ message: 'No Document Found' });
-    }
-    return result;
-  });
-
   fastify.post('/transaction', async (request, reply) => {
     return transactionController.createTransaction(request, reply);
+  });
+
+  fastify.put('/transaction/:transactionId/category', async (request, reply) => {
+    return transactionController.updateTransactionCategory(request, reply);
+  });
+
+  fastify.post('/transaction/dump', async (request, reply) => {
+    return transactionController.dumpData(request, reply);
   });
 }
 
