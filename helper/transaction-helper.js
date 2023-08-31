@@ -3,7 +3,7 @@ class TransactionHelper {
     const dateString = indianDateString;
     const [day, month, year] = dateString.split('/');
     const yearAdjusted = `20${year}`;
-    return new Date(`${yearAdjusted}-${month}-${day}`).toISOString();
+    return new Date(new Date(`${yearAdjusted}-${month}-${day}`).toISOString());
   }
   static sendForProcessing(transactions) {
     const formattedTransactions = [];

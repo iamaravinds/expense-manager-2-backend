@@ -1,37 +1,29 @@
 const TransactionHelper = require('../helper/transaction-helper');
-const { pastTransactions } = require('../constants/pastTransactions');
-class TransactionController {
+class AnalyseController {
   constructor(fastify) {
     this.mongo = fastify.mongo;
     this.Transaction = fastify.mongo.db.collection('transaction');
+    this.Analyse = fastify.mongo.db.collection('analyse');
     this.Client = fastify.mongo.db.collection('client');
   }
-  async getAllTransaction(request, reply) {
+
+  async analyseMonthTransaction(request, reply) {
     try {
-      const { clientId, from, to } = request.query;
-      if (clientId) {
+      const { clientId, startDate, endDate } = request.query;
+      if (clientId && startDate && endDate) {
         const dbClientData = await this.Client.findOne({
           _id: new this.mongo.ObjectId(clientId),
         });
         if (dbClientData) {
-          const condition = {
+          const result = await this.Transaction.find({
             clientId,
-          }
-          if (from || to) {
-            condition.date = {};
-            if (from) {
-              condition.date['$gte'] = new Date(from);
-            }
-            if (to) {
-              condition.date['$lte'] = new Date(to);
-            }
-          }
-          const result = await this.Transaction.find(condition).sort({date: -1}).toArray();
+            date: { $gte: startDate, $lte: endDate },
+          }).toArray();
           return reply.code(200).send(result);
         }
         return reply.code(400).send({ message: 'Invalid client!!' });
       }
-      return reply.code(400).send({ message: 'Client Id is mandatory' });
+      return reply.code(400).send({ message: 'Client Id, startDate and endDate are mandatory' });
     } catch (error) {
       console.log('error', error);
     }
@@ -77,15 +69,5 @@ class TransactionController {
       throw error;
     }
   }
-
-  async dumpData(request, reply) {
-    try {
-      // await this.Transaction.insertMany(pastTransactions);
-      return reply.send(201);
-    } catch (error) {
-      console.log('error', error);
-      throw error;
-    }
-  }
 }
-module.exports = TransactionController;
+module.exports = AnalyseController;
