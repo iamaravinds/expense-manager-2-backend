@@ -2,7 +2,7 @@ const AnalyseController = require('../controller/analyse');
 
 async function routes(fastify, options) {
   const analyseController = new AnalyseController(fastify);
-  fastify.post('/analyse', async (request, reply) => {
+  fastify.get('/analyse', async (request, reply) => {
     return analyseController.analyseMonthTransaction(request, reply);
   });
 }
